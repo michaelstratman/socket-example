@@ -9,37 +9,6 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-/* EECS 482 Discussion: socket programming
- *
- * A simple client-server application.
- * 
- * Operation:
- * 1) Server listens for connections.
- * 2) Client connects, server accepts.
- * 3) Client sends BUFSIZE bytes.
- * 4) Server receives BUFSIZE bytes and prints them as a string.
- *    Server then sends the exact same BUFSIZE bytes back.
- *    Server closes connection and exits.
- * 5) Client receives BUFSIZE bytes, prints them, closes connection and exits.
- *
- * Optional exercises left to the student:
- *  - Make the server able to handle more than one client.
- *    (i.e. the server should continue accepting connections after the first one)
- *  - Support multiple simultaneous clients.
- *  - Change the protocol to send an arbitrary-length message.
- *  - Change the client to send data read from standard input.
- *    This is similar to a program called 'netcat' (or 'nc' for short).
- *     - Bonus: allow the server to send replies at any time.
- *       (this one is trickier; ask me if you're interested)
- *  - Change the protocol to send other data besides ASCII strings.
- *     (Or wait for the discussion on RPC for this one)
- *
- *  - And of course, clean up the code a bit to remove duplication. :-)
- *
- * If you want to play around with this and get feedback, 
- *  feel free to fork the repo on github and try some of these tweaks.
- */
-
 static const size_t BUFSIZE = 1024;
 
 static void handle_error(bool failure_condition, const char *msg)
