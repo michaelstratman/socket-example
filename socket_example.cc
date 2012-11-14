@@ -61,8 +61,8 @@ static int run_server(uint16_t port)
 
     // XXX: loop-recv should be in a function.
     int bytes_recvd = 0;
-    while (bytes_recvd < 1024) {
-        int bytes = recv(client_sock, buf + bytes_recvd, 1024 - bytes_recvd, 0);
+    while (bytes_recvd < BUFSIZE) {
+        int bytes = recv(client_sock, buf + bytes_recvd, BUFSIZE - bytes_recvd, 0);
         printf("received %d bytes\n", bytes);
         handle_error(bytes < 0, "failed to recv bytes");
         handle_error(bytes == 0, "client closed connection");
@@ -76,8 +76,8 @@ static int run_server(uint16_t port)
     //  send could return before copying the entire message into the kernel buffer.
     // However, we're not doing non-blocking I/O here, and the kernel buffer is
     //  currently empty anyways.
-    int bytes = send(client_sock, buf, 1024, 0);
-    handle_error(bytes != 1024, "failed to send bytes");
+    int bytes = send(client_sock, buf, BUFSIZE, 0);
+    handle_error(bytes != BUFSIZE, "failed to send bytes");
 
     // A very brief conversation indeed. 
     //  (How would you enable a longer interaction between client and server,
@@ -113,17 +113,17 @@ static int run_client(const char *server, uint16_t port)
     int rc = connect(sock, (struct sockaddr *) &addr, sizeof(addr));
     handle_error(rc < 0, "connection failed");
 
-    char buf[1024];
-    memset(buf, 0, 1024);
+    char buf[BUFSIZE];
+    memset(buf, 0, BUFSIZE);
     sprintf(buf, "Hello world!\n");
 
-    int bytes = send(sock, buf, 1024, 0);
-    handle_error(bytes != 1024, "failed to send bytes");
+    int bytes = send(sock, buf, BUFSIZE, 0);
+    handle_error(bytes != BUFSIZE, "failed to send bytes");
 
     // XXX: loop-recv should be in a function.
     int bytes_recvd = 0;
-    while (bytes_recvd < 1024) {
-        int bytes = recv(sock, buf + bytes_recvd, 1024 - bytes_recvd, 0);
+    while (bytes_recvd < BUFSIZE) {
+        int bytes = recv(sock, buf + bytes_recvd, BUFSIZE - bytes_recvd, 0);
         handle_error(bytes < 0, "failed to recv bytes");
         handle_error(bytes == 0, "client closed connection");
         
