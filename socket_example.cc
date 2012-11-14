@@ -65,7 +65,7 @@ static int run_server(uint16_t port)
         int bytes = recv(client_sock, buf + bytes_recvd, BUFSIZE - bytes_recvd, 0);
         printf("received %d bytes\n", bytes);
         handle_error(bytes < 0, "failed to recv bytes");
-        handle_error(bytes == 0, "client closed connection");
+        handle_error(bytes == 0, "remote host closed connection");
         
         bytes_recvd += bytes;
     }
@@ -125,7 +125,7 @@ static int run_client(const char *server, uint16_t port)
     while (bytes_recvd < BUFSIZE) {
         int bytes = recv(sock, buf + bytes_recvd, BUFSIZE - bytes_recvd, 0);
         handle_error(bytes < 0, "failed to recv bytes");
-        handle_error(bytes == 0, "client closed connection");
+        handle_error(bytes == 0, "remote host closed connection");
         
         bytes_recvd += bytes;
     }
